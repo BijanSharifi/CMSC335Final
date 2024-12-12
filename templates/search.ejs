@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            width: 100%;
+            background-color: #007BFF;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            display: inline-block;
+        }
+
+        nav a:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            width: 70%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="radio"] {
+            margin-left: 10px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        .book {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+        }
+
+        .book h3 {
+            margin: 0 0 5px;
+            color: #333;
+        }
+
+        .book p {
+            margin: 0 0 10px;
+            color: #555;
+        }
+
+        .book form button {
+            background-color: #28a745;
+            margin-top: 5px;
+        }
+
+        .book form button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/search">Search</a>
+            <a href="/wishlist">Wishlist</a>
+        </nav>
+    </header>
+    <h1>Search for Books</h1>
+    <div class="container">
+        <form action="/search" method="GET">
+            <label for="query">Enter your search:</label>
+            <input type="text" id="query" name="query" placeholder="Search by title or author" value="<%= query || '' %>" required>
+            <div>
+                <input type="radio" id="title" name="searchType" value="title" <%= searchType === 'title' ? 'checked' : '' %>>
+                <label for="title">Search by Title</label>
+                <input type="radio" id="author" name="searchType" value="author" <%= searchType === 'author' ? 'checked' : '' %>>
+                <label for="author">Search by Author</label>
+            </div>
+            <button type="submit">Search</button>
+        </form>
+        <div id="results">
+            <% if (books && books.length > 0) { %>
+                <h2>Search Results:</h2>
+                <% books.forEach(book => { %>
+                    <div class="book">
+                        <h3><%= book.title %></h3>
+                        <p>Author: <%= book.author %></p>
+                        <form action="/search" method="POST">
+                            <input type="hidden" name="title" value="<%= book.title %>">
+                            <input type="hidden" name="author" value="<%= book.author %>">
+                            <input type="email" name="email" placeholder="Enter Your Email" required>
+                            <button type="submit">Add to Wishlist</button>
+                        </form>
+                    </div>
+                <% }) %>
+            <% } else if (books) { %>
+                <p>No results found. Please try a different search.</p>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
